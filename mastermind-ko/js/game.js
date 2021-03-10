@@ -1,14 +1,10 @@
-class Move {
-    constructor(guess, message) {
-        this.guess = guess;
-        this.message = message;
-    }
-}
 // MVC (Architectural Pattern) -> Design Pattern -> Observer
 // KO Library: 2-way binding (declarative)
 //             reactive library -> UI
 // Model- View (Observer)(HTML -> declarative: "data-bind")<-- KO -->ViewModel (Observer) (MVVM)
-class GameViewModel {
+import {Move} from "./move.js";
+
+export class GameViewModel {
     constructor() {
         //region fields
         this.tries = ko.observable(0);
