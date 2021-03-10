@@ -15,7 +15,7 @@ class Application {
         //endregion
 
         //region event listeners
-        this.playButton.addEventListener('click',()=>{
+        this.playButton.addEventListener('click', () => {
             let guess = this.guess.value;
             this.viewModel.play(guess);
             this.updateView();
@@ -25,22 +25,22 @@ class Application {
     }
 
     updateView() { // ViewModel -- DOM API --> View
-         this.tries.innerText = this.viewModel.tries;
-         this.gameLevel.innerText = this.viewModel.gameLevel;
-         this.emptyElement(this.history);
-         for (let move of this.viewModel.moves){
-             let tr = this.history.insertRow();
-             let cellGuess = tr.insertCell(0);
-             let cellMessage = tr.insertCell(1);
-             cellGuess.appendChild(document.createTextNode(move.guess));
-             cellMessage.appendChild(document.createTextNode(move.message));
-         }
+        this.tries.innerText = this.viewModel.tries;
+        this.gameLevel.innerText = this.viewModel.gameLevel;
+        this.emptyElement(this.history);
+        for (let move of this.viewModel.moves) {
+            let tr = this.history.insertRow();
+            let cellGuess = tr.insertCell(0);
+            let cellMessage = tr.insertCell(1);
+            cellGuess.appendChild(document.createTextNode(move.guess));
+            cellMessage.appendChild(document.createTextNode(move.message));
+        }
     }
 
     emptyElement(element) {
         let node = element;
-        while (element.hasChildNodes()){
-            if (node.hasChildNodes()){
+        while (element.hasChildNodes()) {
+            if (node.hasChildNodes()) {
                 node = node.lastChild;
             } else {
                 node = node.parentNode;
@@ -49,6 +49,7 @@ class Application {
         }
     }
 }
+
 let model = new GameViewModel();
 window.onload = () => { // event-triggered
     // document is ready!
