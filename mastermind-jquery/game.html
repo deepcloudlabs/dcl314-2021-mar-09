@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Mastermind (jQuery)</title>
+    <style type="text/css">
+        @import url('css/bootstrap.css');
+        @import url('css/bootstrap-theme.css');
+    </style>
     <script src="js/lib/jquery-1.11.3.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
     <script src="js/game.js"></script>
     <script src="js/application.js"></script>
     <!--
@@ -27,34 +32,47 @@
     -->
 </head>
 <body>
-<table>
-    <tbody>
-    <tr>
-        <td>Game Level:</td>
-        <td><span id="gamelevel">3</span></td>
-    </tr>
-    <tr>
-        <td>Tries:</td>
-        <td><span id="tries">0</span></td>
-    </tr>
-    <tr>
-        <td>Guess:</td>
-        <td>
-            <input id="guess" type="text" value="123">
-            <button id="play">Play</button>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Guess</th>
-        <th>Message</th>
-    </tr>
-    </thead>
-    <tbody id="moves">
-    </tbody>
-</table>
+<p/>
+<div class="container" role="main">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Game Panel</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="tries">Tries</label>
+                <span id="tries" class="badge">New game</span>
+            </div>
+            <div class="form-group">
+                <label for="gamelevel">Game Level</label>
+                <span id="gamelevel" class="badge">3</span>
+            </div>
+            <div class="form-group">
+                <label for="guess">Guess</label>
+                <input type="number" id="guess" min="123" max="987" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <button id="play" class="btn btn-success">Play</button>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Moves</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>Guess</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody id="moves">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
