@@ -10,6 +10,7 @@
     <script src="js/lib/jquery-1.11.3.js"></script>
     <script src="js/lib/bootstrap.js"></script>
     <script src="js/lib/knockout-3.5.1.debug.js"></script>
+    <script src="js/world.js"></script>
 </head>
 <body>
  <p></p>
@@ -21,16 +22,20 @@
          <div class="panel-body">
              <div class="form-group">
                  <label for="continent">Continent</label>
-                 <select id="continent" class="form-control"></select>
+                 <select id="continent"
+                         data-bind="options: continents, value: continent"
+                         class="form-control"></select>
              </div>
              <div class="form-group">
-                 <button class="btn btn-success">List</button>
+                 <button data-bind="click: list" class="btn btn-success">List</button>
              </div>
          </div>
      </div>
      <div class="panel panel-success">
          <div class="panel-heading">
              <h3 class="panel-title">Search Result</h3>
+             <label for="total_population">Total Population:</label>
+             <span id="total_population" data-bind="text: totalPopulation"> </span>
          </div>
          <div class="panel-body">
         <table class="table table-hover table-striped table-responsive">
@@ -39,12 +44,20 @@
                 <th>No</th>
                 <th>Code</th>
                 <th>Name</th>
-                <th>Population</th>
+                <th><button data-bind="click: sortByPopulation" class="btn btn-warning">Population</button></th>
                 <th>Surface Area</th>
+                <th>Operation</th>
             </tr>
             </thead>
-            <tbody>
-
+            <tbody data-bind="foreach: {data: countries, as: 'country'}">
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: country._id"></td>
+                    <td data-bind="text: country.name"></td>
+                    <td data-bind="text: country.population"></td>
+                    <td data-bind="text: country.surfaceArea"></td>
+                    <td><button class="btn btn-danger" data-bind="click: $root.removeCountry">Delete</button></td>
+                </tr>
             </tbody>
         </table>
  </div>
