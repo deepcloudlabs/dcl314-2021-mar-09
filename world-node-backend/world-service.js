@@ -60,9 +60,14 @@ let CountrySchema = new mongoose.Schema({
 let Country = mongoose.model('countries1', CountrySchema);
 //endregion
 
+//region rest api
+// http://localhost:6400/world/api/v1/continents
+api.get("/world/api/v1/continents", async (req,res) => {
+    Country.distinct("continent",(err, continents)=>{
+        res.set("Content-Type", "application/json");
+        res.status(200).send(continents);
+    })
+});
 
-Country.find({"continent": "Asia"},
-    (err, asianCountries) => {
-        asianCountries.forEach(ctry => console.log(ctry.name));
-    }
-);
+api.listen(port);
+//endregion
