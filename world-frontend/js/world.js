@@ -1,3 +1,12 @@
+const TOASTR_CONFIG = {
+    debug: false,
+        timeOut: 3000,
+        extendedTimeOut: 1000,
+        fadeIn: 300,
+        fadeOut: 300,
+        positionClass: 'toast-top-center'
+};
+
 class WorldViewModel {
     constructor() {
         this.continents = ko.observableArray([]);
@@ -32,10 +41,11 @@ class WorldViewModel {
                 url: "http://localhost:6400/world/api/v1/continents",
                 success: continents => {
                     continents.sort();
+                    toastr.success("Continents has been retrieved!", "", TOASTR_CONFIG);
                     this.continents(continents)
                 },
-                error : err => {
-
+                error : (xhr,err,errorThrown) => {
+                    toastr.error(JSON.parse(xhr.responseText), "", TOASTR_CONFIG);
                 }
             }
         )
@@ -48,10 +58,11 @@ class WorldViewModel {
                 cache: false,
                 url: `http://localhost:6400/world/api/v1/countries?continent=${this.continent()}`,
                 success: countries => {
-                    this.countries(countries)
+                    this.countries(countries);
+                    toastr.success("Countries has been retrieved!", "", TOASTR_CONFIG);
                 },
-                error : err => {
-
+                error : (xhr,err,errorThrown) => {
+                    toastr.error(JSON.parse(xhr.responseText), "", TOASTR_CONFIG);
                 }
             }
         )
