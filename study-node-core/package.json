@@ -10,7 +10,8 @@
     "lottery-service": "node lottery-service.js"
   },
   "dependencies": {
-    "node-fetch": "2.6.1",
+    "express": "^4.17.1",
+    "node-fetch": "~2.6.0",
     "ws": "7.4.4"
   },
   "description": "This project studies the core features of nodejs",

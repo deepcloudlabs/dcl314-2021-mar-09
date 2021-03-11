@@ -1,0 +1,20 @@
+semantic versioning:
+major.minor.patch
+major: add capability -> breaking changes
+minor: add capability -> backward compatibility
+patch: bux fix        -> backward compatibility
+
+patch:
+"dependencies": {
+    "node-fetch": "~2.6.0",
+    "ws": "7.4.4"
+  }
+
+npm install ->
+npm update : "~2.6.0" -> 2.6.7 -> 2.6.8
+             "^2.6.0" -> 2.8.3
+             "<2.3.4"
+             ">2.5.6"
+             ">2.1 || <2.6"
+npm install -> local project node_modules
+npm --global install
