@@ -69,5 +69,14 @@ api.get("/world/api/v1/continents", async (req,res) => {
     })
 });
 
+// http://localhost:6400/world/api/v1/countries?continent=Asia
+api.get("/world/api/v1/countries", async (req,res) => {
+    let continent = req.query.continent || "Asia";
+    Country.find({"continent": continent} ,(err, countries)=>{
+        res.set("Content-Type", "application/json");
+        res.status(200).send(countries);
+    })
+});
+
 api.listen(port);
 //endregion
