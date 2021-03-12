@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookStore - Stock Control Application</title>
+    <style type="text/css">
+        @import url('css/toastr.css');
+        @import url('css/bootstrap.css');
+        @import url('css/bootstrap-theme.css');
+    </style>
+    <script src="js/lib/jquery-1.11.3.js"></script>
+    <script src="js/lib/toastr.min.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
+    <script src="js/lib/knockout-3.5.1.debug.js"></script>
+</head>
+<body>
+<p></p>
+<div class="container" role="main">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Book Stock Panel</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="isbn">ISBN</label>
+                <input type="text"
+                       id="isbn" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text"
+                       id="title" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text"
+                       id="author" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input type="text"
+                       id="year" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="publisher">Publisher</label>
+                <input type="text"
+                       id="publisher" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="edition">Edition</label>
+                <input type="text"
+                       id="edition" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text"
+                       id="price" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="text"
+                       id="quantity" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="photo">Cover Photo</label>
+                <img style="width: 128px; height: 128px; border-radius: 64px;"
+                     data-bind="attr: { src: fileData().dataUrl }" />
+                <input type="file"
+                       id="photo"
+                       data-bind="fileInput: fileData"
+                       accept="image/*" />
+            </div>
+            <div class="form-group">
+                <button data-bind="click: list" class="btn btn-success">Find Book</button>
+                <button data-bind="click: list" class="btn btn-success">Retrieve All Books</button>
+                <button data-bind="click: list" class="btn btn-warning">Add Book</button>
+                <button data-bind="click: list" class="btn btn-warning">Update Book</button>
+                <button data-bind="click: list" class="btn btn-danger">Delete Book</button>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search Result</h3>
+            <label for="total_population">Total Population:</label>
+            <span id="total_population" data-bind="text: totalPopulation"> </span>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Photo</th>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Edition</th>
+                    <th>Publisher</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+                </thead>
+                <tbody data-bind="foreach: {data: countries, as: 'country'}">
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: country._id"></td>
+                    <td data-bind="text: country.name"></td>
+                    <td data-bind="text: country.population"></td>
+                    <td data-bind="text: country.surfaceArea"></td>
+                    <td><button class="btn btn-danger" data-bind="click: $root.removeCountry">Delete</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

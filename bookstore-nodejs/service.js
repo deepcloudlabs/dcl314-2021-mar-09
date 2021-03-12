@@ -12,6 +12,10 @@ const mongodb_opts = {
 };
 mongoose.connect(mongodb_url, mongodb_opts);
 
+const updatableBookFields = [
+    "publisher", "price", "quantity", "coverPhoto"
+];
+
 const bookSchema = new mongoose.Schema({
     "_id": { // isbn
         type: String,
@@ -58,12 +62,6 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: AppConfig.NO_IMAGE
-    },
-    "genre": {
-        type: String,
-        required: false,
-        enum: ["Science", "", "", ""],
-        default: "Science"
     }
 });
 let Book = mongoose.model("books", bookSchema);
@@ -78,7 +76,7 @@ const api = express();
 
 api.use(bodyParser.json({limit: "5mb"}));
 api.use(logger('dev'));
-api.use(function(req,res,next){
+api.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "HEAD, POST, PUT, DELETE, PATCH, GET");
     res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
@@ -86,7 +84,7 @@ api.use(function(req,res,next){
 })
 //endregion
 
-//region book stock rest over http api : express.js
+//region book stock rest over http api : express.js ✔
 // REST API: Resource -> Book -> books
 //         ✔  1. GET, POST, PUT/PATCH,  DELETE
 //            2. URL Design: http(s)://localhost:7200
@@ -95,14 +93,14 @@ api.use(function(req,res,next){
 //                 ii. query parameter -> /books?page=10&size=25
 //                         page, size -> query parameter
 //         ✔  3. Representation: application/json, application/xml, ...
-api.get("/books/:isbn", (req,res) => {
+api.get("/books/:isbn", (req, res) => {
     let isbn = req.params.isbn;
     Book.findOne(
         {"_id": isbn},
         {"coverPhoto": false},
-        (err,book) => {
+        (err, book) => {
             res.set("Content-Type", "application/json");
-            if (err){
+            if (err) {
                 res.status(404).send({status: "failed", reason: err});
             } else {
                 res.status(200).send(book);
@@ -111,14 +109,14 @@ api.get("/books/:isbn", (req,res) => {
     )
 })
 
-api.get("/books/:isbn/cover", (req,res) => {
+api.get("/books/:isbn/cover", (req, res) => {
     let isbn = req.params.isbn;
     Book.findOne(
         {"_id": isbn},
         {"coverPhoto": true, "_id": false},
-        (err,book) => {
+        (err, book) => {
             res.set("Content-Type", "application/json");
-            if (err){
+            if (err) {
                 res.status(404).send({status: "failed", reason: err});
             } else {
                 res.status(200).send(book);
@@ -127,28 +125,88 @@ api.get("/books/:isbn/cover", (req,res) => {
     )
 })
 
-api.get("/books", (req,res) => {
-    //TODO: implement get method
+// http://localhost:7200/books?page=10&size=25
+api.get("/books", (req, res) => {
+    let page = Number(req.query.page || 0);
+    let size = Number(req.query.size || 25);
+    let offset = page * size;
+    Book.find(
+        {},
+        {coverPhoto: false},
+        {skip: offset, limit: size},
+        (err, books) => {
+            res.set("Content-Type", "application/json");
+            if (err) {
+                res.status(404).send({status: "failed", reason: err});
+            } else {
+                res.status(200).send(books);
+            }
+        }
+    )
 })
 
-api.post("/books", (req,res) => {
-    //TODO: implement post method
+api.post("/books", (req, res) => {
+    let book = req.body;
+    let entity = new Book(book);
+    entity.save((err, newBook) => {
+        res.set("Content-Type", "application/json");
+        if (err) {
+            res.status(404).send({status: "failed", reason: err});
+        } else {
+            res.status(200).send({"status": "ok"});
+        }
+    })
 })
 
-api.put("/books/:isbn", (req,res) => {
-    //TODO: implement put method
+function patchOrPut(req, res) {
+    let book = req.body;
+    let isbn = req.params.isbn;
+    let updatedBook = {};
+    // reflection
+    for (let field in book) {
+        if (updatableBookFields.includes(field)) {
+            updatedBook[field] = book[field];
+        }
+    }
+    Book.update(
+        {_id: isbn},
+        {$set: updatedBook},
+        {upsert: false},
+        (err, newBook) => {
+            res.set("Content-Type", "application/json");
+            if (err) {
+                res.status(404).send({status: "failed", reason: err});
+            } else {
+                res.status(200).send({"status": "ok"});
+            }
+        }
+    )
+}
+
+api.put("/books/:isbn", (req, res) => {
+    patchOrPut(req, res);
 })
 
-api.patch("/books/:isbn", (req,res) => {
-    //TODO: implement patch method
+api.patch("/books/:isbn", (req, res) => {
+    patchOrPut(req, res);
 })
 
-api.delete("/books/:isbn", (req,res) => {
-    //TODO: implement delete method
+api.delete("/books/:isbn", (req, res) => {
+    let isbn = req.params.isbn;
+    Book.findOneAndDelete({
+            "_id": isbn
+        }, {coverPhoto: false},
+        (err, removedBook) => {
+            res.set("Content-Type", "application/json");
+            if (err) {
+                res.status(404).send({status: "failed", reason: err});
+            } else {
+                res.status(200).send(removedBook);
+            }
+        })
 })
 
-
-//endregion
+//endregion ✔
 
 //region bookstore rest over http api : express.js
 
