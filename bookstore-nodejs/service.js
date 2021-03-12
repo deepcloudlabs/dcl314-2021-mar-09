@@ -97,7 +97,8 @@ api.get("/books/:isbn", (req, res) => {
     let isbn = req.params.isbn;
     Book.findOne(
         {"_id": isbn},
-        {"coverPhoto": false},
+        //{"coverPhoto": false},
+        {},
         (err, book) => {
             res.set("Content-Type", "application/json");
             if (err) {
@@ -113,7 +114,8 @@ api.get("/books/:isbn/cover", (req, res) => {
     let isbn = req.params.isbn;
     Book.findOne(
         {"_id": isbn},
-        {"coverPhoto": true, "_id": false},
+        //{"coverPhoto": true, "_id": false},
+        {},
         (err, book) => {
             res.set("Content-Type", "application/json");
             if (err) {
