@@ -65,10 +65,10 @@ const bookSchema = new mongoose.Schema({
     }
 });
 const lineItemSchema = new mongoose.Schema({
-   "isbn" : {
-       type: String,
-       required: true
-   },
+    "isbn": {
+        type: String,
+        required: true
+    },
     "price": {
         type: Number,
         required: true,
@@ -82,8 +82,8 @@ const lineItemSchema = new mongoose.Schema({
 });
 
 const orderSchema = new mongoose.Schema({
-    "_id" : mongoose.Schema.Types.ObjectId,
-    lines : [lineItemSchema]
+    "_id": mongoose.Schema.Types.ObjectId,
+    lines: [lineItemSchema]
 });
 
 let Book = mongoose.model("books", bookSchema);
@@ -237,7 +237,7 @@ api.delete("/books/:isbn", (req, res) => {
 //endregion ✔
 
 //region bookstore rest over http api : express.js ✔
-api.post("/orders",(req, res) => {
+api.post("/orders", (req, res) => {
     let order = req.body;
     order._id = mongoose.Types.ObjectId();
     let entity = new Order(order);
@@ -247,20 +247,29 @@ api.post("/orders",(req, res) => {
             res.status(404).send({status: "failed", reason: err});
         } else {
             let totalPrice = order.lines
-                .map( item => Number(item.price) * Number(item.quantity) )
-                .reduce ( (acc,vol) => acc+vol, 0.0);
-            res.status(200).send({"status": "ok", "total":totalPrice});
+                .map(item => Number(item.price) * Number(item.quantity))
+                .reduce((acc, vol) => acc + vol, 0.0);
+            sockets.forEach( socket => {
+                socket.emit("order", order);
+            })
+            res.status(200).send({"status": "ok", "total": totalPrice});
         }
     })
 })
 //endregion
 
-//region websocket/socket.io configuration
-
+//region websocket/socket.io configuration ✔
+const sockets = [];
+let server = api.listen(port);
+let io = require("socket.io").listen(server);
+io.set("origins", "*:*");
+io.on("connect", socket => {
+    sockets.push(socket);
+    socket.on("disconnect", () => {
+        let index = sockets.indexOf(socket);
+        if (index >= 0) {
+            sockets.splice(index, 1);
+        }
+    })
+});
 //endregion
-
-//region bam (business activity monitoring) rest over ws api : socket.io
-
-//endregion
-
-api.listen(port);

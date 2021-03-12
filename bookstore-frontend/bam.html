@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Business Activity Monitoring (BAM)</title>
+    <style type="text/css">
+        @import url('css/toastr.css');
+        @import url('css/bootstrap.css');
+        @import url('css/bootstrap-theme.css');
+    </style>
+    <script src="js/lib/jquery-1.11.3.js"></script>
+    <script src="js/lib/toastr.min.js"></script>
+    <script src="js/lib/socket.io.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
+    <script src="js/lib/knockout-3.4.2.debug.js"></script>
+    <script src="js/lib/chart.js"></script>
+    <script src="js/lib/ko-chart.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/bam.js"></script>
+</head>
+<body>
+<p></p>
+<div class="container" role="main">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Online View: Orders</h3>
+            <button class="btn btn-warning" data-bind="click: reset">Reset</button>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- ko foreach: {data: items, as: 'item'} -->
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: item.isbn"></td>
+                    <td data-bind="text: item.title"></td>
+                    <td data-bind="text: item.price"></td>
+                    <td data-bind="text: item.quantity"></td>
+                    <td data-bind="text: item.total"></td>
+                </tr>
+                <!-- /ko -->
+                <tr>
+                    <td colspan="4"></td>
+                    <td data-bind="text: quantity"></td>
+                    <td data-bind="text: volume"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <canvas data-bind="chart: { type: 'line', data: data, options: { observeChanges: true, throttle: 100, animation: { duration: 0} } }"></canvas>
+        </div>
+    </div>
+</div>
+</body>
+</html>
