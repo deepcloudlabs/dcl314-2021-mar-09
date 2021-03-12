@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookStore</title>
+    <style type="text/css">
+        @import url('css/toastr.css');
+        @import url('css/bootstrap.css');
+        @import url('css/bootstrap-theme.css');
+    </style>
+    <script src="js/lib/jquery-1.11.3.js"></script>
+    <script src="js/lib/toastr.min.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
+    <script src="js/lib/knockout-3.5.1.debug.js"></script>
+    <script src="js/lib/ko-file.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/bookstore.js"></script>
+</head>
+<body>
+<p></p>
+<div class="container" role="main">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Books in the stock</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Photo</th>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Edition</th>
+                    <th>Publisher</th>
+                    <th>Price</th>
+                    <th>Operations</th>
+                </tr>
+                </thead>
+                <tbody data-bind="foreach: {data: books, as: 'book'}">
+                <tr>
+                    <td data-bind="text: $index() + 1"></td>
+                    <td><img style="width: 64px; border-radius: 32px;" data-bind="attr: {src: book.coverPhoto}"></td>
+                    <td data-bind="text: book._id"></td>
+                    <td data-bind="text: book.title"></td>
+                    <td data-bind="text: book.author"></td>
+                    <td data-bind="text: book.year"></td>
+                    <td data-bind="text: book.edition"></td>
+                    <td data-bind="text: book.publisher"></td>
+                    <td data-bind="text: book.price"></td>
+                    <td>
+                        <button data-bind="click: $root.addToBasket" class="btn-sm btn-success">Add</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+</body>
+</html>

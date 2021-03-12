@@ -64,7 +64,32 @@ const bookSchema = new mongoose.Schema({
         default: AppConfig.NO_IMAGE
     }
 });
+const lineItemSchema = new mongoose.Schema({
+   "isbn" : {
+       type: String,
+       required: true
+   },
+    "price": {
+        type: Number,
+        required: true,
+        min: 5
+    },
+    "quantity": {
+        type: Number,
+        required: true,
+        min: 0
+    }
+});
+
+const orderSchema = new mongoose.Schema({
+    "_id" : mongoose.Schema.Types.ObjectId,
+    lines : [lineItemSchema]
+});
+
 let Book = mongoose.model("books", bookSchema);
+
+let Order = mongoose.model("purchases", orderSchema);
+
 //endregion
 
 //region express configuration ✔
@@ -134,7 +159,8 @@ api.get("/books", (req, res) => {
     let offset = page * size;
     Book.find(
         {},
-        {coverPhoto: false},
+        //{coverPhoto: false},
+        {},
         {skip: offset, limit: size},
         (err, books) => {
             res.set("Content-Type", "application/json");
@@ -210,8 +236,22 @@ api.delete("/books/:isbn", (req, res) => {
 
 //endregion ✔
 
-//region bookstore rest over http api : express.js
-
+//region bookstore rest over http api : express.js ✔
+api.post("/orders",(req, res) => {
+    let order = req.body;
+    let entity = new Order(order);
+    entity.save((err, newBook) => {
+        res.set("Content-Type", "application/json");
+        if (err) {
+            res.status(404).send({status: "failed", reason: err});
+        } else {
+            let totalPrice = order.lines
+                .map( item => Number(item.price) * Number(item.quantity) )
+                .reduce ( (acc,vol) => acc+vol, 0.0);
+            res.status(200).send({"status": "ok", "total":totalPrice});
+        }
+    })
+})
 //endregion
 
 //region websocket/socket.io configuration

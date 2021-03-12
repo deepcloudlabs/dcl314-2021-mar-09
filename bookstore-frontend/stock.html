@@ -107,6 +107,7 @@
                     <th>Publisher</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Operations</th>
                 </tr>
                 </thead>
                 <tbody data-bind="foreach: {data: books, as: 'book'}">
@@ -119,11 +120,16 @@
                     <td data-bind="text: book.year"></td>
                     <td data-bind="text: book.edition"></td>
                     <td data-bind="text: book.publisher"></td>
-                    <td data-bind="text: book.price"></td>
-                    <td data-bind="text: book.quantity"></td>
+                    <td><input type="text" data-bind="value: book.price"></td>
+                    <td><input type="text" data-bind="value: book.quantity"></td>
+                    <td>
+                        <button data-bind="click: $root.updateRowBook" class="btn-sm btn-warning">Update</button>
+                        <button data-bind="click: $root.deleteRowBook" class="btn-sm btn-danger">Delete</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+    </div>
 </body>
 </html>
