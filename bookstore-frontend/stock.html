@@ -12,6 +12,9 @@
     <script src="js/lib/toastr.min.js"></script>
     <script src="js/lib/bootstrap.js"></script>
     <script src="js/lib/knockout-3.5.1.debug.js"></script>
+    <script src="js/lib/ko-file.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/stock.js"></script>
 </head>
 <body>
 <p></p>
@@ -24,66 +27,71 @@
             <div class="form-group">
                 <label for="isbn">ISBN</label>
                 <input type="text"
+                       data-bind="value: book.isbn"
                        id="isbn" class="form-control">
             </div>
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text"
+                       data-bind="value: book.title"
                        id="title" class="form-control">
             </div>
             <div class="form-group">
                 <label for="author">Author</label>
                 <input type="text"
+                       data-bind="value: book.author"
                        id="author" class="form-control">
             </div>
             <div class="form-group">
                 <label for="year">Year</label>
                 <input type="text"
+                       data-bind="value: book.year"
                        id="year" class="form-control">
             </div>
             <div class="form-group">
                 <label for="publisher">Publisher</label>
                 <input type="text"
+                       data-bind="value: book.publisher"
                        id="publisher" class="form-control">
             </div>
             <div class="form-group">
                 <label for="edition">Edition</label>
                 <input type="text"
+                       data-bind="value: book.edition"
                        id="edition" class="form-control">
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
                 <input type="text"
+                       data-bind="value: book.price"
                        id="price" class="form-control">
             </div>
             <div class="form-group">
                 <label for="quantity">Quantity</label>
                 <input type="text"
+                       data-bind="value: book.quantity"
                        id="quantity" class="form-control">
             </div>
             <div class="form-group">
-                <label for="photo">Cover Photo</label>
-                <img style="width: 128px; height: 128px; border-radius: 64px;"
-                     data-bind="attr: { src: fileData().dataUrl }" />
-                <input type="file"
-                       id="photo"
-                       data-bind="fileInput: fileData"
-                       accept="image/*" />
+                <label class="control-label" for="photo">Cover Photo</label>
+                <img id="photo" data-bind="attr: {src: fileData().dataUrl}" class="thumbnail" style="width: 64px;"/>
+                <label class="btn btn-info">
+                    <input type="file" data-bind="fileInput: fileData" style="display: none;" class="form-control"/>
+                    <span>File</span>
+                </label>
             </div>
             <div class="form-group">
-                <button data-bind="click: list" class="btn btn-success">Find Book</button>
-                <button data-bind="click: list" class="btn btn-success">Retrieve All Books</button>
-                <button data-bind="click: list" class="btn btn-warning">Add Book</button>
-                <button data-bind="click: list" class="btn btn-warning">Update Book</button>
-                <button data-bind="click: list" class="btn btn-danger">Delete Book</button>
+                <button data-bind="click: findBook" class="btn btn-success">Find Book</button>
+                <button data-bind="click: retrieveBooks" class="btn btn-success">Retrieve All Books</button>
+                <button data-bind="click: addBook" class="btn btn-warning">Add Book</button>
+                <button data-bind="click: updateBook" class="btn btn-warning">Update Book</button>
+                <button data-bind="click: deleteBook" class="btn btn-danger">Delete Book</button>
             </div>
         </div>
     </div>
     <div class="panel panel-success">
         <div class="panel-heading">
-            <h3 class="panel-title">Search Result</h3>
-            <label for="total_population">Total Population:</label>
-            <span id="total_population" data-bind="text: totalPopulation"> </span>
+            <h3 class="panel-title">Books in the stock</h3>
         </div>
         <div class="panel-body">
             <table class="table table-hover table-striped table-responsive">
@@ -101,14 +109,18 @@
                     <th>Quantity</th>
                 </tr>
                 </thead>
-                <tbody data-bind="foreach: {data: countries, as: 'country'}">
+                <tbody data-bind="foreach: {data: books, as: 'book'}">
                 <tr>
                     <td data-bind="text: $index() + 1"></td>
-                    <td data-bind="text: country._id"></td>
-                    <td data-bind="text: country.name"></td>
-                    <td data-bind="text: country.population"></td>
-                    <td data-bind="text: country.surfaceArea"></td>
-                    <td><button class="btn btn-danger" data-bind="click: $root.removeCountry">Delete</button></td>
+                    <td><img style="width: 64px; border-radius: 32px;" data-bind="attr: {src: book.coverPhoto}"></td>
+                    <td data-bind="text: book._id"></td>
+                    <td data-bind="text: book.title"></td>
+                    <td data-bind="text: book.author"></td>
+                    <td data-bind="text: book.year"></td>
+                    <td data-bind="text: book.edition"></td>
+                    <td data-bind="text: book.publisher"></td>
+                    <td data-bind="text: book.price"></td>
+                    <td data-bind="text: book.quantity"></td>
                 </tr>
                 </tbody>
             </table>
