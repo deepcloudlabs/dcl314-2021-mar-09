@@ -239,6 +239,7 @@ api.delete("/books/:isbn", (req, res) => {
 //region bookstore rest over http api : express.js ✔
 api.post("/orders",(req, res) => {
     let order = req.body;
+    order._id = mongoose.Types.ObjectId();
     let entity = new Order(order);
     entity.save((err, newBook) => {
         res.set("Content-Type", "application/json");

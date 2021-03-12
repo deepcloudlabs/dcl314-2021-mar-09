@@ -11,7 +11,9 @@
     <script src="js/lib/jquery-1.11.3.js"></script>
     <script src="js/lib/toastr.min.js"></script>
     <script src="js/lib/bootstrap.js"></script>
-    <script src="js/lib/knockout-3.5.1.debug.js"></script>
+    <script src="js/lib/knockout-3.4.2.debug.js"></script>
+    <script src="js/lib/knockout-localization.js"></script>
+    <script src="js/lib/knockout.validation.js"></script>
     <script src="js/lib/ko-file.js"></script>
     <script src="js/config.js"></script>
     <script src="js/bookstore.js"></script>
@@ -51,12 +53,59 @@
                     <td data-bind="text: book.publisher"></td>
                     <td data-bind="text: book.price"></td>
                     <td>
-                        <button data-bind="click: $root.addToBasket" class="btn-sm btn-success">Add</button>
+                        <button data-bind="click: $root.order.addToBasket" class="btn-sm btn-success">Add</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Basket</h3>
+            <!-- ko if: order.lines().length > 0 -->
+            <br>
+            <label for="total">Total: </label>
+            <span id="total" data-bind="text: order.totalPrice"></span>
+            <br>
+            <button data-bind="click: $root.purchase, disable: $root.order.formInvalid" class="btn-sm btn-default">Purchase</button>
+            <!-- /ko -->
+        </div>
+        <div class="panel-body">
+            <!-- ko if: order.lines().length > 0 -->
+                <table class="table table-hover table-striped table-responsive">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>ISBN</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach: {data: order.lines, as: 'line'} -->
+                        <tr>
+                            <td data-bind="text: $index() + 1"></td>
+                            <td data-bind="text: line.isbn"></td>
+                            <td data-bind="text: line.title"></td>
+                            <td data-bind="text: line.price"></td>
+                            <td><input type="text" data-bind="value: line.quantity"></td>
+                            <td>
+                                <button data-bind="click: $root.order.removeFromBasket" class="btn-sm btn-danger">Remove</button>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    </tbody>
+                </table>
+            <!-- /ko -->
+            <!-- ko if: order.lines().length === 0 -->
+               <h1>Basket is empty!</h1>
+            <!-- /ko -->
+
+        </div>
+    </div>
 </div>
 </body>
 </html>
